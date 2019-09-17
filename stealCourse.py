@@ -2,6 +2,7 @@ import requests
 import sched, time
 from bs4 import BeautifulSoup
 import bs4
+from courseStealler import Selected_View00
 
 session_id = input("session_id: ")
 
@@ -13,7 +14,13 @@ def steal():
 
 s = sched.scheduler(time.time, time.sleep)
 def do_something(sc): 
-    steal()
+    res = requests.get("https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Add_Course01.cgi?session_id="+session_id+"&use_cge_new_cate=1&m=0&dept=I001&grade=1&page=2&cge_cate=2&cge_subcate=5")
+    soup = BeautifulSoup(res.text, 'lxml')
+    d = Selected_View00(soup)
+    print(d[6]["remain"])
+
+    if(d[6]["remain"] != "0"): 
+        steal()
    
     # print(r)
     # do your stuff

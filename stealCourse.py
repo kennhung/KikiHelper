@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 import bs4
 from courseStealler import Selected_View00
 
+import datetime
+
 session_id = input("session_id: ")
 
 def steal():
@@ -17,14 +19,13 @@ def do_something(sc):
     res = requests.get("https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Add_Course01.cgi?session_id="+session_id+"&use_cge_new_cate=1&m=0&dept=I001&grade=1&page=2&cge_cate=2&cge_subcate=5")
     soup = BeautifulSoup(res.text, 'lxml')
     d = Selected_View00(soup)
-    print(d[6]["remain"])
+    print(datetime.datetime.now() , d[6]["remain"])
 
     if(d[6]["remain"] != "0"): 
+        print("found at:", datetime.datetime.now())
         steal()
-   
-    # print(r)
-    # do your stuff
-    s.enter(5, 1, do_something, (sc,))
+    else:
+        s.enter(2, 1, do_something, (sc,))
 
-s.enter(5, 1, do_something, (s,))
+s.enter(2, 1, do_something, (s,))
 s.run()

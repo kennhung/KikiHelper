@@ -20,9 +20,9 @@ def Selected_View00(soup):
         okCirc = col[0].find('img', attrs={"src":"../../Graph/O.gif"})
         
         dict = {
-            "ok": (type(okCirc) == bs4.element.Tag),
-            "code": col[1].font.text,
-            "num": col[2].font.text
+            "ok": (type(okCirc) == bs4.element.Tag) or True,
+            "code": col[0].font.text,
+            "num": col[1].font.text
         }
 
         data.append(dict)

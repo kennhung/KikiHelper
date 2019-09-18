@@ -32,7 +32,8 @@ def SoupToData(soup):
         dict = {
             "input": inputTag,
             "current": current,
-            "remain": remain
+            "remain": remain,
+            "name": col[4].font.text
         }
 
         data.append(dict)

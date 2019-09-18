@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import bs4
 
-def Selected_View00(soup):
+def SoupToData(soup):
     # print(soup)
     # return
     titles = soup.find_all('th', attrs={"bgcolor":"yellow"})
@@ -19,12 +19,20 @@ def Selected_View00(soup):
         for th in tr.select('th'):
             col.append(th)
     
-        okCirc = col[0].find('input')
+        inputTag = col[0].find('input')
         
+        current = col[1].text
+        if col[1].font is not None:
+            current = col[1].font.text
+
+        remain = col[2].text
+        if col[2].font is not None:
+            remain = col[2].font.text
+
         dict = {
-            "input": okCirc,
-            "current": col[1].font.text,
-            "remain": col[2].font.text
+            "input": inputTag,
+            "current": current,
+            "remain": remain
         }
 
         data.append(dict)
@@ -33,18 +41,21 @@ def Selected_View00(soup):
 
     return data
 
+def SearchCourse(dept, grade, page, cge_cate, cge_subcate):
+    res = requests.get("https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Add_Course01.cgi?session_id="+session_id+"&dept="+dept+"&grade="+grade+"&page="+page+"&cge_cate="+cge_cate+"&cge_subcate="+cge_subcate)
+    return BeautifulSoup(res.text, 'lxml')
+
 if __name__ == "__main__":
     session_id = input("session_id: ")
+    dept = input("dept: ")
+    grade = input("grade: ")
     page = input("page: ")
     cate = input("cate: ")
     sub_cate = input("sub cate: ")
 
+    soup = SearchCourse(dept, grade, page, cate, sub_cate)
 
-    # res = requests.get('https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Add_Course01.cgi?session_id='+session_id+'&dept=I001&grade=1&page='+page+'&cge_cate='+cate+'&cge_subcate'+sub_cate)
-    res = requests.get("https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Add_Course01.cgi?session_id="+session_id+"&dept=I001&grade=1&page=2&cge_cate=2&cge_subcate=5")
-    soup = BeautifulSoup(res.text, 'lxml')
-
-    d = Selected_View00(soup)
+    d = SoupToData(soup)
 
     count = 0
     for i in d:

@@ -28,6 +28,7 @@ if __name__ == "__main__":
     cate = input("cate: ")
     sub_cate = input("sub cate: ")
     course = input("course: ")
+    discord_webhook = input("discord webhook: ")
 
     soup = SearchCourse(session, dept, grade, page, cate, sub_cate)
     d = SoupToData(soup)
@@ -42,8 +43,9 @@ if __name__ == "__main__":
 
         print(datetime.datetime.now(), d[num]["name"] , d[num]["remain"])
 
-        #TODO: find course row number
         if(d[num]["remain"] != "0"): 
+            if(discord_webhook != ""):
+                requests.post(discord_webhook, data={"content":"found at: {time}, {name}, {remain}".format(time=datetime.datetime.now(), name=d[num]["name"], remain=d[num]["remain"])})
             print("found at:", datetime.datetime.now())
             steal(session, dept, grade, page,cate,sub_cate, course)
         else:

@@ -18,6 +18,7 @@ def foundCourseIndex(course_num, d):
         if data["input"]["value"] == course_num:
             return counter
         counter+=1 
+    
 
 if __name__ == "__main__":   
     session = input("session_id: ")
@@ -39,7 +40,7 @@ if __name__ == "__main__":
         d = SoupToData(soup)
         num = foundCourseIndex(course, d)
 
-        print(datetime.datetime.now() , d[num]["remain"])
+        print(datetime.datetime.now(), d[num]["name"] , d[num]["remain"])
 
         #TODO: find course row number
         if(d[num]["remain"] != "0"): 

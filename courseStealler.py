@@ -41,19 +41,22 @@ def SoupToData(soup):
 
     return data
 
-def SearchCourse(dept, grade, page, cge_cate, cge_subcate):
-    res = requests.get("https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Add_Course01.cgi?session_id="+session_id+"&dept="+dept+"&grade="+grade+"&page="+page+"&cge_cate="+cge_cate+"&cge_subcate="+cge_subcate)
+def SearchCourse(session_id, dept, grade, page, cge_cate, cge_subcate):
+    try:
+        res = requests.get("https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Add_Course01.cgi?session_id="+session_id+"&dept="+dept+"&grade="+grade+"&page="+page+"&cge_cate="+cge_cate+"&cge_subcate="+cge_subcate)
+    except ConnectionError:
+        print("connection error")
     return BeautifulSoup(res.text, 'lxml')
 
 if __name__ == "__main__":
-    session_id = input("session_id: ")
+    session = input("session_id: ")
     dept = input("dept: ")
     grade = input("grade: ")
     page = input("page: ")
     cate = input("cate: ")
     sub_cate = input("sub cate: ")
 
-    soup = SearchCourse(dept, grade, page, cate, sub_cate)
+    soup = SearchCourse(session, dept, grade, page, cate, sub_cate)
 
     d = SoupToData(soup)
 

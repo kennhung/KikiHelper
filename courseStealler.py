@@ -46,7 +46,7 @@ def SearchCourse(session_id, dept, grade, page, cge_cate, cge_subcate):
     try:
         res = requests.get("https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Add_Course01.cgi?session_id="+session_id+"&dept="+dept+"&grade="+grade+"&page="+page+"&cge_cate="+cge_cate+"&cge_subcate="+cge_subcate)
         res.encoding = 'utf8'
-    except ConnectionError:
+    except requests.ConnectionError:
         print("connection error")
     return BeautifulSoup(res.text, 'lxml')
 

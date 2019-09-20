@@ -31,7 +31,7 @@ def runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook
         d = SoupToData(soup)
         num = foundCourseIndex(course, d)
 
-        print(datetime.datetime.now(), d[num]["name"] , d[num]["remain"])
+        print(datetime.datetime.now(), d[num]["name"] , d[num]["remain"], stealMode)
 
         if(d[num]["remain"] != "0"): 
             if(discord_webhook != ""):

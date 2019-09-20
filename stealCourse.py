@@ -19,17 +19,7 @@ def foundCourseIndex(course_num, d):
             return counter
         counter+=1 
     
-
-if __name__ == "__main__":   
-    session = input("session_id: ")
-    dept = input("dept: ")
-    grade = input("grade: ")
-    page = input("page: ")
-    cate = input("cate: ")
-    sub_cate = input("sub cate: ")
-    course = input("course: ")
-    discord_webhook = input("discord webhook: ")
-
+def runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook, stealMode):
     soup = SearchCourse(session, dept, grade, page, cate, sub_cate)
     d = SoupToData(soup)
     num = foundCourseIndex(course, d)
@@ -47,9 +37,26 @@ if __name__ == "__main__":
             if(discord_webhook != ""):
                 requests.post(discord_webhook, data={"content":"found at: {time}, {name}, {remain}".format(time=datetime.datetime.now(), name=d[num]["name"], remain=d[num]["remain"])})
             print("found at:", datetime.datetime.now())
-            steal(session, dept, grade, page,cate,sub_cate, course)
+            if(stealMode == 1):
+                steal(session, dept, grade, page,cate,sub_cate, course)
+            else:
+                s.enter(2, 1, do_something, (sc,))
         else:
             s.enter(2, 1, do_something, (sc,))
 
     s.enter(2, 1, do_something, (s,))
     s.run()
+
+if __name__ == "__main__":   
+    session = input("session_id: ")
+    dept = input("dept: ")
+    grade = input("grade: ")
+    page = input("page: ")
+    cate = input("cate: ")
+    sub_cate = input("sub cate: ")
+    course = input("course: ")
+    discord_webhook = input("discord webhook: ")
+    stealMode = input("stealMode: ")
+    runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook, stealMode)
+
+

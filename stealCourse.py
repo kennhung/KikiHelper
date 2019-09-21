@@ -57,6 +57,7 @@ if __name__ == "__main__":
     course = input("course: ")
     discord_webhook = input("discord webhook: ")
     stealMode = input("stealMode: ")
+    stealMode = int(stealMode)
     runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook, stealMode)
 
 

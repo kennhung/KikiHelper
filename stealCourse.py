@@ -28,21 +28,22 @@ def runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook
     s = sched.scheduler(time.time, time.sleep)
     def do_something(sc): 
         soup = SearchCourse(session, dept, grade, page, cate, sub_cate)
-        d = SoupToData(soup)
-        num = foundCourseIndex(course, d)
+        if(type(soup)==bs4.BeautifulSoup):
+            d = SoupToData(soup)
+            num = foundCourseIndex(course, d)
 
-        print(datetime.datetime.now(), d[num]["name"] , d[num]["remain"], stealMode)
+            print(datetime.datetime.now(), d[num]["name"] , d[num]["remain"], stealMode)
 
-        if(d[num]["remain"] != "0"): 
-            if(discord_webhook != ""):
-                requests.post(discord_webhook, data={"content":"found at: {time}, {name}, {remain}".format(time=datetime.datetime.now(), name=d[num]["name"], remain=d[num]["remain"])})
-            print("found at:", datetime.datetime.now())
-            if(stealMode == 1):
-                steal(session, dept, grade, page,cate,sub_cate, course)
-            else:
-                s.enter(2, 1, do_something, (sc,))
+            if(d[num]["remain"] != "0"): 
+                if(discord_webhook != ""):
+                    requests.post(discord_webhook, data={"content":"found at: {time}, {name}, {remain}".format(time=datetime.datetime.now(), name=d[num]["name"], remain=d[num]["remain"])})
+                print("found at:", datetime.datetime.now())
+                if(stealMode == 1):
+                    steal(session, dept, grade, page,cate,sub_cate, course)
+                    return
         else:
-            s.enter(2, 1, do_something, (sc,))
+            print("soup data error format!!")
+        s.enter(2, 1, do_something, (sc,))
 
     s.enter(2, 1, do_something, (s,))
     s.run()

@@ -48,7 +48,11 @@ def SearchCourse(session_id, dept, grade, page, cge_cate, cge_subcate):
         res.encoding = 'utf8'
     except requests.ConnectionError:
         print("connection error")
-    return BeautifulSoup(res.text, 'lxml')
+        return 
+    if(res.status_code != 200):
+        return
+    else:
+        return BeautifulSoup(res.text, 'lxml')
 
 if __name__ == "__main__":
     session = input("session_id: ")

@@ -9,6 +9,7 @@ verify_ssl = true
 beautifulsoup4 = "*"
 requests = "*"
 lxml = "*"
+colorama = "*"
 
 [requires]
 python_version = "3.7"

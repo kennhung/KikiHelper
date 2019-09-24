@@ -4,6 +4,7 @@ import requests
 
 def GetSelectedCourse(session_id):
     res = requests.get('https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Selected_View00.cgi?session_id='+session_id)
+    res.encoding = "utf8"
     soup = BeautifulSoup(res.text, 'lxml')
     d = Selected_View00(soup)
     return d
@@ -28,7 +29,12 @@ def Selected_View00(soup):
         dict = {
             "ok": (type(okCirc) == bs4.element.Tag) or True,
             "code": col[0].font.text,
-            "num": col[1].font.text
+            "num": col[1].font.text,
+            "name": col[2].font.text,
+            "teacher": col[3].font.text,
+            "type": col[5].font.text,
+            "time": col[6].font.text,
+            "room": col[7].font.text
         }
 
         data.append(dict)

@@ -129,14 +129,19 @@ if __name__ == "__main__":
             if(sysStatus["status_text"].find("暫不開放查詢") != -1):
                 print(Fore.RED+"System currently closed!!")
             else:
-                print(GetSelectedCourse(main_session_id))
+                selected = GetSelectedCourse(main_session_id)
+                for i in selected:
+                    print("{course_id}_{course_num}\t{name}\t{teacher}\t{time}\t{room}".format(course_id=i["code"], course_num = i["num"], name=i["name"].ljust(20), teacher=i["teacher"].ljust(8), time=i["time"].ljust(20), room=i["room"]))
         elif mode == 2:
             if(sysStatus["status_text"].find("先搶先贏") != -1):
                 break
             else:
                 print(Fore.RED+"Can't do this now!!")
         elif mode == 3:
-            break
+            if(sysStatus["status_text"].find("先搶先贏") != -1):
+                break
+            else:
+                print(Fore.RED+"Can't do this now!!")
         elif mode == 4:
             announce_mode()
     pass

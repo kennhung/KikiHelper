@@ -7,7 +7,7 @@ from courseStealler import SearchCourse, SoupToData
 import datetime
 
 def steal(session_id, dept, grade, page, cge_cate, cge_subcate, course):
-    res = requests.post("https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Add_Course01.cgi", "session_id="+session_id+"&dept="+dept+"&grade="+grade+"&cge_cate="+cate+"&cge_subcate="+cge_subcate+"&page="+page+"&SelectTag=1&course="+course+"&"+course+"=3")
+    res = requests.post("https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Add_Course01.cgi", "session_id="+session_id+"&dept="+dept+"&grade="+grade+"&cge_cate="+cge_cate+"&cge_subcate="+cge_subcate+"&page="+page+"&SelectTag=1&course="+course+"&"+course+"=3")
     soup = BeautifulSoup(res.text, 'lxml')
     a = soup.find_all("a", attrs={"href":"javascript:history.back()"})
     print(a)

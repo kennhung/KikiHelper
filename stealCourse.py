@@ -43,9 +43,9 @@ def runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook
                     return
         else:
             print("soup data error format!!")
-        s.enter(2, 1, do_something, (sc,))
+        s.enter(1, 1, do_something, (sc,))
 
-    s.enter(2, 1, do_something, (s,))
+    s.enter(1, 1, do_something, (s,))
     s.run()
 
 if __name__ == "__main__":   

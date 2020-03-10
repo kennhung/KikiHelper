@@ -15,8 +15,9 @@ def steal(session_id, dept, grade, page, cge_cate, cge_subcate, course):
 def foundCourseIndex(course_num, d):
     counter = 0
     for data in d:
-        if type(data["input"]) == 'bs4.element.Tag' and data["input"]["value"] == course_num:
-            return counter
+        if type(data["input"]) == bs4.element.Tag:
+            if data["input"]["value"] == course_num:
+                return counter
         counter+=1 
     
 def runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook, stealMode):

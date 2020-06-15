@@ -26,6 +26,8 @@ def runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook
     num = foundCourseIndex(course, d)
     print("stealing course {index}: {name}, {current}".format(index=num, name=d[num]["name"], current=d[num]["current"]))
 
+    error_count = 0
+
     s = sched.scheduler(time.time, time.sleep)
     def do_something(sc): 
         soup = SearchCourse(session, dept, grade, page, cate, sub_cate)
@@ -43,8 +45,13 @@ def runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook
                     if(stealMode == 1):
                         steal(session, dept, grade, page,cate,sub_cate, course)
                         return
+                error_count = 0
             except :
                 print("error while processing data!!")
+                error_count+=1
+                if error_count >= 10 and error_count % 5 == 0 and discord_webhook != "":
+                    requests.post(discord_webhook, data={"content":"error running on {time}, {course}, err_count:{errorTime}".format(time=datetime.datetime.now(), course=course, errorTime=error_count)})
+
         else:
             print("soup data error format!!")
         s.enter(1, 1, do_something, (sc,))

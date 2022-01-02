@@ -15,9 +15,8 @@ def steal(session_id, dept, grade, page, cge_cate, cge_subcate, course):
 def foundCourseIndex(course_num, d):
     counter = 0
     for data in d:
-        if type(data["input"]) == bs4.element.Tag:
-            if data["input"]["value"] == course_num:
-                return counter
+        if data["course_num"] == course_num:
+            return counter    
         counter+=1 
     
 def runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook, stealMode):
@@ -36,7 +35,7 @@ def runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook
                 d = SoupToData(soup)
                 num = foundCourseIndex(course, d)
 
-                print(datetime.datetime.now(), d[num]["name"] , d[num]["remain"], stealMode)
+                print(datetime.datetime.now(), d[num]["name"] , d[num]["remain"], d[num]["current"]), stealMode)
 
                 if(d[num]["remain"] != "0"): 
                     if(discord_webhook != ""):

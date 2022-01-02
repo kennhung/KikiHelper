@@ -33,7 +33,8 @@ def SoupToData(soup):
             "input": inputTag,
             "current": current,
             "remain": remain,
-            "name": col[3].font.text
+            "name": col[3].font.text,
+            "course_num": '_'.join(col[12].font.a['href'].split("course=")[1].split("&group="))
         }
 
         data.append(dict)

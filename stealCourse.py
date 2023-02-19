@@ -8,21 +8,27 @@ import datetime
 
 def steal(session_id, dept, grade, page, cge_cate, cge_subcate, course):
     res = requests.post("https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Add_Course01.cgi", "session_id="+session_id+"&dept="+dept+"&grade="+grade+"&cge_cate="+cge_cate+"&cge_subcate="+cge_subcate+"&page="+page+"&SelectTag=1&course="+course+"&"+course+"=3")
+    res.encoding = 'utf8'
     soup = BeautifulSoup(res.text, 'lxml')
+    # print(soup)
     a = soup.find_all("a", attrs={"href":"javascript:history.back()"})
     print(a)
 
 def foundCourseIndex(course_num, d):
     counter = 0
     for data in d:
+        # print(data["course_num"])
         if data["course_num"] == course_num:
             return counter    
-        counter+=1 
+        counter+=1
+    print("Not found!!!") 
     
 def runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook, stealMode):
     soup = SearchCourse(session, dept, grade, page, cate, sub_cate)
     d = SoupToData(soup)
+    # print(d)
     num = foundCourseIndex(course, d)
+    # print(num)
     print("stealing course {index}: {name}, {current}".format(index=num, name=d[num]["name"], current=d[num]["current"]))
 
     error_count = 0

@@ -22,6 +22,12 @@ def user_info(session_id):
     resp = requests.get(
         "https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Selected_View00.cgi?session_id="+session_id)
     resp.encoding = 'utf8'
+
+    ## dbg
+    # if resp.text.find("您本次的登入已經無效") != -1:
+    #     print("您本次的登入已經無效")
+    # print(resp.text)
+
     if resp.text.find("您輸入的密碼有誤") != -1 or resp.text.find("您本次的登入已經無效") != -1:
         return None
     login_status_bs = BeautifulSoup(resp.text, 'lxml')
@@ -39,8 +45,10 @@ def systemStatus():
     # print(sysStatus_bs)
 
     status_text = sysStatus_bs[3].font.text
-    if len(sysStatus_bs) >= 4:
-        status_text += ", " + sysStatus_bs[4].font.text
+    # print(status_text)
+    # print(sysStatus_bs[4].font.text)
+    # if len(sysStatus_bs) >= 4:
+    #     status_text += ", " + sysStatus_bs[4].font.text
 
     return {"status": sysStatus_bs[0].parent["bgcolor"], "semester": sysStatus_bs[2].font.text, "status_text": status_text}
 

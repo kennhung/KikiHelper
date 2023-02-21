@@ -19,7 +19,7 @@ def foundCourseIndex(course_num, d):
             return counter    
         counter+=1 
     
-def runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook, stealMode):
+def runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook, stealMode, id, pwd):
     soup = SearchCourse(session, dept, grade, page, cate, sub_cate)
     d = SoupToData(soup)
     num = foundCourseIndex(course, d)
@@ -36,7 +36,7 @@ def runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook
             try:
                 d = SoupToData(soup)
                 while d == []:
-                    session = login_with_password()
+                    session = login_with_password(id, pwd)
                     soup = SearchCourse(session, dept, grade, page, cate, sub_cate)
                     d = SoupToData(soup)
                     # print("QQ")
@@ -75,7 +75,9 @@ if __name__ == "__main__":
     course = input("course: ")
     discord_webhook = input("discord webhook: ")
     stealMode = input("stealMode: ")
+    id = input("ID: ")
+    pwd = input("PASSWORD: ")
     stealMode = int(stealMode)
-    runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook, stealMode)
+    runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook, stealMode, id, pwd)
 
 

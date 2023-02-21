@@ -4,11 +4,11 @@ import bs4
 
 
 
-def login_with_password():
+def login_with_password(id, pwd):
     data = {
         'version': '0',
-        'id': '409410014',
-        'password': '123qwe!@#QWE',
+        'id': id,
+        'password': pwd,
         'term': 'on',
         'm': '0'
     }

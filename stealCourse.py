@@ -2,7 +2,7 @@ import requests
 import sched, time
 from bs4 import BeautifulSoup
 import bs4
-from courseStealler import SearchCourse, SoupToData
+from courseStealler import SearchCourse, SoupToData, login_with_password
 
 import datetime
 
@@ -19,20 +19,27 @@ def foundCourseIndex(course_num, d):
             return counter    
         counter+=1 
     
-def runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook, stealMode):
+def runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook, stealMode, id, pwd):
     soup = SearchCourse(session, dept, grade, page, cate, sub_cate)
     d = SoupToData(soup)
     num = foundCourseIndex(course, d)
+    print(num)
     print("stealing course {index}: {name}, {current}".format(index=num, name=d[num]["name"], current=d[num]["current"]))
 
     error_count = 0
 
     s = sched.scheduler(time.time, time.sleep)
     def do_something(sc): 
+        nonlocal session
         soup = SearchCourse(session, dept, grade, page, cate, sub_cate)
         if type(soup) == bs4.BeautifulSoup:
             try:
                 d = SoupToData(soup)
+                while d == []:
+                    session = login_with_password(id, pwd)
+                    soup = SearchCourse(session, dept, grade, page, cate, sub_cate)
+                    d = SoupToData(soup)
+                    # print("QQ")
                 num = foundCourseIndex(course, d)
 
                 print(datetime.datetime.now(), d[num]["name"] , d[num]["remain"], d[num]["current"], stealMode)
@@ -44,10 +51,10 @@ def runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook
                     if(stealMode == 1):
                         steal(session, dept, grade, page,cate,sub_cate, course)
                         return
-                error_count = 0
+                # error_count = 0
             except :
                 print("error while processing data!!")
-                error_count+=1
+                # error_count+=1
                 if error_count >= 10 and error_count % 5 == 0 and discord_webhook != "":
                     requests.post(discord_webhook, data={"content":"error running on {time}, {course}, err_count:{errorTime}".format(time=datetime.datetime.now(), course=course, errorTime=error_count)})
 
@@ -68,7 +75,9 @@ if __name__ == "__main__":
     course = input("course: ")
     discord_webhook = input("discord webhook: ")
     stealMode = input("stealMode: ")
+    id = input("ID: ")
+    pwd = input("PASSWORD: ")
     stealMode = int(stealMode)
-    runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook, stealMode)
+    runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook, stealMode, id, pwd)
 
 

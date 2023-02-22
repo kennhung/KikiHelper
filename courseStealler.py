@@ -2,12 +2,54 @@ import requests
 from bs4 import BeautifulSoup
 import bs4
 
+
+
+def login_with_password(id, pwd):
+    data = {
+        'version': '0',
+        'id': id,
+        'password': pwd,
+        'term': 'on',
+        'm': '0'
+    }
+    res = requests.post("https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/bookmark.php",data=data)
+    res.encoding = 'utf8'
+    soup = BeautifulSoup(res.text, 'lxml')
+    # print(soup)
+
+    meta_tag = soup.find('meta', {'http-equiv': 'refresh'})
+
+    if meta_tag:
+        content = meta_tag['content']
+        session_id = content.split('=')[-1]
+        print(session_id)
+    
+    return session_id
+
+
+def SearchCourse(session_id, dept, grade, page, cge_cate, cge_subcate):
+    try:
+        res = requests.get("https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Add_Course01.cgi?session_id="+session_id+"&dept="+dept+"&grade="+grade+"&page="+page+"&cge_cate="+cge_cate+"&cge_subcate="+cge_subcate)
+        res.encoding = 'utf8'
+    except requests.ConnectionError:
+        print("connection error")
+        return 
+    if(res.status_code != 200):
+        return
+    else:
+        return BeautifulSoup(res.text, 'lxml')
+
 def SoupToData(soup):
     # print(soup)
     # return
     titles = soup.find_all('th', attrs={"bgcolor":"yellow"})
     # print(titles)
     # return 
+
+    if titles == []:
+        print(soup)
+        return []
+
     tr = titles[0].find_parents("tr")[0].find_next_sibling("tr")
 
     data = []
@@ -42,18 +84,6 @@ def SoupToData(soup):
         tr = tr.find_next_sibling("tr")
 
     return data
-
-def SearchCourse(session_id, dept, grade, page, cge_cate, cge_subcate):
-    try:
-        res = requests.get("https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Add_Course01.cgi?session_id="+session_id+"&dept="+dept+"&grade="+grade+"&page="+page+"&cge_cate="+cge_cate+"&cge_subcate="+cge_subcate)
-        res.encoding = 'utf8'
-    except requests.ConnectionError:
-        print("connection error")
-        return 
-    if(res.status_code != 200):
-        return
-    else:
-        return BeautifulSoup(res.text, 'lxml')
 
 if __name__ == "__main__":
     session = input("session_id: ")
